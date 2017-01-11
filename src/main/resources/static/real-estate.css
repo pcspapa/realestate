@@ -6,23 +6,6 @@
  * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
-package com.cspark.service;
-
-import com.cspark.entity.Building;
-
-import java.util.List;
-
-/**
- * Created by cspark on 2016. 10. 21..
- */
-public interface BuildingService {
-
-    List<Building> findAll();
-
-    Building findOne(Long id);
-
-    void add(Building building);
-
-    void edit(Building building);
-
+.real-estate {
+    padding: 20px;
 }

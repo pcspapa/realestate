@@ -11,13 +11,9 @@ package com.cspark.repository;
 import com.cspark.entity.Building;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
-
 /**
  * Created by cspark on 2016. 10. 21..
  */
 public interface BuildingRepository extends JpaRepository<Building, Long> {
-
-    List<Building> findAll();
 
 }

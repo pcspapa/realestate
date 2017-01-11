@@ -8,21 +8,20 @@
 
 package com.cspark.service;
 
-import com.cspark.entity.Building;
+import com.cspark.entity.Contact;
 
 import java.util.List;
 
 /**
- * Created by cspark on 2016. 10. 21..
+ * Created by cspark on 2016. 12. 13..
  */
-public interface BuildingService {
+public interface ContactService {
 
-    List<Building> findAll();
+    List<Contact> findAll();
 
-    Building findOne(Long id);
+    Contact findOne(Long id);
 
-    void add(Building building);
+    void add(Contact contact);
 
-    void edit(Building building);
-
+    void edit(Contact contact);
 }

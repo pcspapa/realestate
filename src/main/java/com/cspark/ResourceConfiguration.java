@@ -8,14 +8,14 @@
 
 package com.cspark;
 
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 /**
  * Created by cspark on 2016. 10. 25..
  */
-@SpringBootApplication
+@Configuration
 public class ResourceConfiguration extends WebMvcConfigurerAdapter {
 
     @Override

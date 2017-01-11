@@ -8,14 +8,12 @@
 
 package com.cspark.web;
 
-import com.cspark.entity.Building;
 import com.cspark.entity.Contact;
-import com.cspark.repository.BuildingRepository;
-import com.cspark.service.BuildingService;
+import com.cspark.service.ContactService;
+import com.cspark.validation.constraints.ByteLengthValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,47 +28,47 @@ import javax.validation.Valid;
  * Created by cspark on 2016. 10. 21..
  */
 @Controller
-@RequestMapping("/buildings")
-public class BuildingController {
+@RequestMapping("/contacts")
+public class ContactController {
 
-    private static final Logger logger = LoggerFactory.getLogger(BuildingController.class);
+    private static final Logger logger = LoggerFactory.getLogger(ContactController.class);
 
     @Autowired
-    private BuildingService buildingService;
+    private ContactService contactService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public String buildings(Model model) {
-        model.addAttribute("buildings", buildingService.findAll());
+    public String contacts(Model model) {
+        model.addAttribute("contacts", contactService.findAll());
 
-        return "buildings/building-list";
+        return "contacts/contact-list";
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String addToBuildings(@ModelAttribute @Valid Building building, BindingResult bindingResult) {
+    public String addToContacts(@ModelAttribute @Valid Contact contact, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             logger.warn("{}", bindingResult.getAllErrors());
-            return "buildings/writing-building";
+            return "contacts/writing-contact";
         }
-        buildingService.add(building);
+        contactService.add(contact);
 
-        return "redirect:/buildings";
+        return "redirect:/contacts";
     }
 
     @RequestMapping(value = "/new", method = RequestMethod.GET)
-    public String building(Building building) {
-        return "buildings/writing-building";
+    public String contact(Contact contact) {
+        return "contacts/writing-contact";
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public String building(@PathVariable Long id, Model model) {
-        model.addAttribute("building", buildingService.findOne(id));
+    public String contact(@PathVariable Long id, Model model) {
+        model.addAttribute("contact", contactService.findOne(id));
 
-        return "buildings/reading-building";
+        return "contacts/reading-contact";
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public String editToBuildings(@PathVariable Long id, Building building) {
-        buildingService.edit(building);
+    public String editToContacts(@PathVariable Long id, Contact contact) {
+        contactService.edit(contact);
 
         return "contacts/reading-contact";
     }

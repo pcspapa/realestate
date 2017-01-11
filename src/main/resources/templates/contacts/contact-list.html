@@ -1,15 +1,33 @@
 <!DOCTYPE html>
+<!--
+  ~ Copyright (c) 2016. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+  ~ Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+  ~ Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+  ~ Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+  ~ Vestibulum commodo. Ut rhoncus gravida arcu.
+  -->
+
 <html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-    <name>Reading List</name>
+    <name>Business Consulting :: Contact List</name>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/bootstrap/3.3.7/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}"/>
-    <link rel="stylesheet" href="./static/real-estate.css" th:href="@{/real-estate.css}"/>
+    <link rel="stylesheet" href="../static/real-estate.css" th:href="@{/real-estate.css}"/>
 
     <script src="https://cdn.jsdelivr.net/jquery/3.1.1/jquery.min.js" th:src="@{/webjars/jquery/3.1.1/jquery.min.js}"></script>
     <script src="https://cdn.jsdelivr.net/bootstrap/3.3.7/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
     <script type="text/javascript">
         $(document).ready(function() {
-
+            // click event for .table > tbody > tr
+            $('.table tbody').on( 'click', 'tr', function () {
+                if ( $(this).hasClass('active') ) {
+                    $(this).removeClass('active');
+                }
+                else {
+                    $('.table tr.active').removeClass('active');
+                    $(this).addClass('active');
+                }
+                $(location).attr('href', $(this).data("url") + $(this).data("id"));
+            } );
         });
     </script>
 </head>
@@ -57,25 +75,57 @@
 <div class="container-fluid real-estate">
 
     <div class="real-estate-header">
-        <h1>Your Building List</h1>
+        <h1>Your Contact List</h1>
         <p class="lead blog-description">The official example template of creating a blog with Bootstrap.</p>
     </div>
 
-    <div th:unless="${#lists.isEmpty(buildings)}">
-        <dl class="row" th:each="building : ${buildings}">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <td>name</td>
+                <td>mobile</td>
+                <td>phone</td>
+                <td>fax</td>
+                <td>email</td>
+                <td>company</td>
+            </tr>
+        </thead>
+        <tbody th:unless="${#lists.isEmpty(contacts)}">
+            <tr th:each="contact : ${contacts}" th:attr="data-id=${contact.id},data-url=@{/contacts/}">
+                <td th:text="${contact.fullname}">full name</td>
+                <td th:text="${contact.mobileNo}">mobile number</td>
+                <td th:text="${contact.phoneNo}">phone number</td>
+                <td th:text="${contact.faxNo}">fax number</td>
+                <td th:text="${contact.email}">email</td>
+                <td th:text="${contact.companyName}">company</td>
+            </tr>
+        </tbody>
+        <tbody th:if="${#lists.isEmpty(contacts)}">
+            <tr>
+                <td colspan="6">You have no contacts in your contact list</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p class="text-right">
+        <a class="btn btn-primary" href="./writing-contact.html" th:href="@{/contacts/new}" role="button">New</a>
+    </p>
+
+    <div th:unless="${#lists.isEmpty(contacts)}">
+        <dl class="row" th:each="contact : ${contacts}">
             <dt class="col-md-7">
-                <span th:text="${building.name}">name</span>
-                <span th:text="${building.address}">address</span>
+                <span th:text="${contact.fullname}">name</span>
+                <span th:text="${contact.mobileNo}">mobileNo</span>
             </dt>
             <dd class="col-md-5">
-                <span th:if="${building.note}" th:text="${building.note}">note</span>
-                <span th:if="${building.note eq null}">No note available</span>
+                <span th:if="${contact.companyName}" th:text="${contact.companyName}">company</span>
+                <span th:if="${contact.companyName eq null}">No company available</span>
             </dd>
         </dl>
     </div>
 
-    <div th:if="${#lists.isEmpty(buildings)}">
-        <p>You have no buildings in your building list</p>
+    <div th:if="${#lists.isEmpty(contacts)}">
+        <p>You have no contacts in your contact list</p>
     </div>
 
 </div>

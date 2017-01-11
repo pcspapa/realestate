@@ -6,23 +6,14 @@
  * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
-package com.cspark.service;
+package com.cspark.repository;
 
-import com.cspark.entity.Building;
-
-import java.util.List;
+import com.cspark.entity.Contact;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * Created by cspark on 2016. 10. 21..
  */
-public interface BuildingService {
-
-    List<Building> findAll();
-
-    Building findOne(Long id);
-
-    void add(Building building);
-
-    void edit(Building building);
+public interface ContactRepository extends JpaRepository<Contact, Long> {
 
 }
