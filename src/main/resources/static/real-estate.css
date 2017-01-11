@@ -9,3 +9,7 @@
 .real-estate {
     padding: 20px;
 }
+
+.typeahead {
+    z-index: 1051;
+}

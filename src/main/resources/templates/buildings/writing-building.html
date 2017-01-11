@@ -15,8 +15,30 @@
 
     <script src="https://cdn.jsdelivr.net/jquery/3.1.1/jquery.min.js" th:src="@{/webjars/jquery/3.1.1/jquery.min.js}"></script>
     <script src="https://cdn.jsdelivr.net/bootstrap/3.3.7/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
-    <script type="text/javascript">
+    <script src="./static/libs/bootstrap-3-typeahead/3.1.1/bootstrap3-typeahead.js" th:src="@{/libs//bootstrap-3-typeahead/3.1.1/bootstrap3-typeahead.min.js}"></script>
+    <script type="text/javascript" th:inline="javascript">
         $(document).ready(function() {
+
+            // TODO 입력된 정보가 삭제될 경우 처리 필요.
+            $('#name').typeahead({
+                autoSelect: true,
+                delay: 400,
+                displayText: function (item) {
+                    return item.bdName
+                },
+                afterSelect: function (item) {
+                    this.$element[0].value = item.bdName;
+                },
+                source: function (value, process) {
+                    $.ajax({
+                        url: /*[[@{/addresses/}]]*/ '/addresses/?bdName=query',
+                        data: {bdName: value},
+                        dataType: 'json'
+                    }).done(function (data) {
+                        return process(data);
+                    });
+                }
+            });
 
         });
     </script>
