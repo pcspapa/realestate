@@ -10,22 +10,35 @@ package com.cspark.entity.building;
 
 import lombok.Data;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.Embedded;
+import javax.validation.constraints.Digits;
 
 /**
- * Created by cspark on 2017. 1. 2..
+ * Created by cspark on 2017. 1. 12..
  */
 @Embeddable
 @Data
-public class Elevator {
+public class TypicalFloorArea {
+
+    @Embedded
+    private Area rental;
+
+    @Embedded
+    private Area exclusive;
 
     /**
-     * 유형 (type)
+     * 전용율 (Exclusive Ratio)
      */
-    private String type;
+    @Digits(integer = 2, fraction = 0)
+    @Column(precision = 2)
+    private Integer exclusiveRatio;
 
     /**
-     * 비고 (note)
+     * 층고 (Floor Height)
      */
-    private String note;
+    @Digits(integer = 2, fraction = 0)
+    @Column(precision = 2)
+    private Integer floorHeight;
 }
