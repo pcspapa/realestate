@@ -10,12 +10,13 @@ package com.cspark.entity.address;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
 /**
+ * juso.go.kr의 건물DB POOL Model
+ *
  * Created by cspark on 2017. 1. 11..
  */
 @Entity

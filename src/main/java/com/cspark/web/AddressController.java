@@ -8,7 +8,11 @@
 
 package com.cspark.web;
 
+import com.cspark.entity.address.Address;
+import com.cspark.entity.address.Address;
 import com.cspark.entity.address.BuildAddress;
+import com.cspark.service.AddressService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,13 +27,11 @@ import java.util.List;
 @RequestMapping("/addresses")
 public class AddressController {
 
-    @RequestMapping
-    public List<BuildAddress> addresses(@RequestParam(name = "bdName") String bdName) {
-        List<BuildAddress> bdList = new ArrayList<>();
-        bdList.add(new BuildAddress("만선빌1"));
-        bdList.add(new BuildAddress("만선빌2"));
-        bdList.add(new BuildAddress("만선빌3"));
+    @Autowired
+    private AddressService addressService;
 
-        return bdList;
+    @RequestMapping
+    public List<Address> addresses(@RequestParam(name = "bdName") String bdName) {
+        return addressService.findBySggBdName(bdName);
     }
 }

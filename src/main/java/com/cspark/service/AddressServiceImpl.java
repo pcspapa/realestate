@@ -8,40 +8,24 @@
 
 package com.cspark.service;
 
-import com.cspark.entity.Building;
 import com.cspark.entity.address.Address;
-import com.cspark.repository.BuildingRepository;
+import com.cspark.repository.AddressRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
- * Created by cspark on 2017. 1. 2..
+ * Created by cspark on 2017. 2. 1..
  */
 @Service
-public class BuildingServiceImpl implements BuildingService {
+public class AddressServiceImpl implements AddressService {
 
     @Autowired
-    private BuildingRepository buildingRepository;
+    AddressRepository addressRepository;
 
     @Override
-    public List<Building> findAll() {
-        return buildingRepository.findAll();
-    }
-
-    @Override
-    public Building findOne(Long id) {
-        return buildingRepository.findOne(id);
-    }
-
-    @Override
-    public void add(Building building) {
-        buildingRepository.save(building);
-    }
-
-    @Override
-    public void edit(Building building) {
-        buildingRepository.save(building);
+    public List<Address> findBySggBdName(String sggBdName) {
+        return addressRepository.findBySggBdNameContaining(sggBdName);
     }
 }

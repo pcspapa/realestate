@@ -10,6 +10,7 @@ package com.cspark.service;
 
 import com.cspark.entity.Building;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 /**
@@ -21,8 +22,10 @@ public interface BuildingService {
 
     Building findOne(Long id);
 
+    @Transactional
     void add(Building building);
 
+    @Transactional
     void edit(Building building);
 
 }

@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+
+<!--
+  ~ Copyright (c) 2016. Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+  ~ Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan. 
+  ~ Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna. 
+  ~ Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus. 
+  ~ Vestibulum commodo. Ut rhoncus gravida arcu. 
+  -->
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+    <form th:fragment="form (action, method)" class="form-horizontal" th:action="${action}" th:object="${building}" th:method="${method}">
+        <h3>기본정보</h3>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group" th:class="${#fields.hasErrors('address')} ? 'form-group has-error' : 'form-group'">
+                    <label th:for="address" class="col-sm-2 control-label">Address</label>
+                    <div class="col-sm-10">
+                        <div class="input-group">
+                            <input type="text" class="form-control" th:field="*{address}" placeholder="서울시 강서구 방화동" required="required" th:required="true"/>
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button">
+                                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <p th:errors="*{address}" th:errorclass="text-danger"></p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-10 col-sm-offset-2">
+                        <input type="text" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group" th:class="${#fields.hasErrors('name')} ? 'form-group has-error' : 'form-group'">
+                    <label th:for="name" class="col-sm-2 control-label">Name</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" th:field="*{name}" placeholder="희우빌딩" required="required" th:required="true" data-provide="typeahead"/>
+                        <p th:errors="*{name}" th:errorclass="text-danger"></p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label th:for="approvalOfUse" class="col-xs-12 col-sm-2 control-label">Approval</label>
+                    <div class="col-xs-4 col-sm-3">
+                        <input type="text" class="form-control" th:field="*{approvalOfUse.date}" placeholder="일자"/>
+                    </div>
+                    <div class="col-xs-8 col-sm-7">
+                        <input type="text" class="form-control" th:field="*{approvalOfUse.note}" placeholder="XXXX년 증축, 리모델링"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label th:for="purpose" class="col-sm-2 control-label">Purpose</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" th:field="*{purpose}" placeholder="건물용도"/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label th:for="classification" class="col-sm-2 control-label">Classification</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" th:field="*{classification}" placeholder="건물구분"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label th:for="landArea" class="col-xs-12 col-sm-2 control-label">Land Area</label>
+                    <div class="col-xs-6 col-sm-5">
+                        <div class="input-group">
+                            <input type="number" min="0.01" max="99999.99" step="0.01" class="form-control text-right" th:field="*{landArea.pyeong}" placeholder="대지면적 평"/>
+                            <span class="input-group-addon">평</span>
+                        </div>
+                    </div>
+                    <div class="col-xs-6 col-sm-5">
+                        <div class="input-group">
+                            <input type="number" min="0.01" max="99999.99" step="0.01" class="form-control text-right" th:field="*{landArea.squareMeter}" placeholder="대지면적 ㎡"/>
+                            <span class="input-group-addon">㎡</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label th:for="area" class="col-xs-12 col-sm-2 control-label">Area</label>
+                    <div class="col-xs-6 col-sm-5">
+                        <div class="input-group">
+                            <input type="number" min="0.01" max="99999.99" step="0.01" class="form-control text-right" th:field="*{area.pyeong}" placeholder="건축면적 평"/>
+                            <span class="input-group-addon">평</span>
+                        </div>
+                    </div>
+                    <div class="col-xs-6 col-sm-5">
+                        <div class="input-group">
+                            <input type="number" min="0.01" max="99999.99" step="0.01" class="form-control text-right" th:field="*{area.squareMeter}" placeholder="건축면적 ㎡"/>
+                            <span class="input-group-addon">㎡</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label th:for="totalFloorArea" class="col-xs-12 col-sm-2 control-label">Floor Area</label>
+                    <div class="col-xs-6 col-sm-5">
+                        <div class="input-group">
+                            <input type="number" min="0.01" max="99999.99" step="0.01" class="form-control text-right" th:field="*{totalFloorArea.pyeong}" placeholder="연면적 평"/>
+                            <span class="input-group-addon">평</span>
+                        </div>
+                    </div>
+                    <div class="col-xs-6 col-sm-5">
+                        <div class="input-group">
+                            <input type="number" min="0.01" max="99999.99" step="0.01" class="form-control text-right" th:field="*{totalFloorArea.squareMeter}" placeholder="연면적 ㎡"/>
+                            <span class="input-group-addon">㎡</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label th:for="ratio" class="col-xs-12 col-sm-2 control-label">Ratio</label>
+                    <div class="col-xs-6 col-sm-5">
+                        <div class="input-group">
+                            <span class="input-group-addon">건폐율</span>
+                            <input type="number" min="0.01" max="99.99" step="0.01" class="form-control text-right" th:field="*{ratio.coverage}" placeholder="99.99"/>
+                            <span class="input-group-addon">%</span>
+                        </div>
+                    </div>
+                    <div class="col-xs-6 col-sm-5">
+                        <div class="input-group">
+                            <span class="input-group-addon">연면적</span>
+                            <input type="number" min="0.01" max="99.99" step="0.01" class="form-control text-right" th:field="*{ratio.floor}" placeholder="99.99"/>
+                            <span class="input-group-addon">%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label th:for="composition" class="col-sm-2 control-label">Composition</label>
+                    <div class="col-xs-12 col-sm-10">
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <div class="input-group">
+                                    <span class="input-group-addon">지하</span>
+                                    <input type="number" min="0" max="99" step="1" class="form-control text-right" th:field="*{composition.basementFloor}"/>
+                                    <span class="input-group-addon">층</span>
+                                </div>
+                            </div>
+                            <div class="col-xs-4">
+                                <div class="input-group">
+                                    <span class="input-group-addon">지상</span>
+                                    <input type="number" min="1" max="999" step="1" class="form-control text-right" th:field="*{composition.groundFloor}"/>
+                                    <span class="input-group-addon">층</span>
+                                </div>
+                            </div>
+                            <div class="col-xs-4">
+                                <input type="text" class="form-control" th:field="*{composition.type}" placeholder="유형"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label th:for="structure" class="col-sm-2 control-label">Structure</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" th:field="*{structure}" placeholder="주요구조 ex) 철근콘크리트조, 철골조"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label th:for="parkingFacility" class="col-sm-2 control-label">Parking</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" th:field="*{parkingFacility}" placeholder="주차방식 ex) 총 100대 (자주식 50 + 기계식 50 / 그랜져급)"/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label th:for="elevator" class="col-xs-12 col-sm-2 control-label">Elevator</label>
+                    <div class="col-xs-4 col-sm-3">
+                        <input type="text" class="form-control" th:field="*{elevator.type}" placeholder="유형"/>
+                    </div>
+                    <div class="col-xs-8 col-sm-7">
+                        <input type="text" class="form-control" th:field="*{elevator.note}" placeholder="승용 3대, 비상 1대, 화물 1대"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label th:for="airConditioner" class="col-xs-12 col-sm-2 control-label">Air</label>
+                    <div class="col-xs-4 col-sm-3">
+                        <input type="text" class="form-control" th:field="*{airConditioner.type}" placeholder="유형"/>
+                    </div>
+                    <div class="col-xs-8 col-sm-7">
+                        <input type="text" class="form-control" th:field="*{airConditioner.note}" placeholder="08~18시 가동, 추가설치가능"/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label th:for="subwayStationSphere" class="col-sm-2 control-label">Subway</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" th:field="*{subwayStationSphere}" placeholder="역세권"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label th:for="nearestCrossroad" class="col-sm-2 control-label">Crossroad</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" th:field="*{nearestCrossroad}" placeholder="근접사거리 ex)XXX사거리"/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label th:for="accessRoad" class="col-sm-2 control-label">Road</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" th:field="*{accessRoad}" placeholder="접근도로"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label th:for="note" class="col-sm-1 control-label">note</label>
+            <div class="col-sm-11">
+                <textarea class="form-control" th:field="*{note}"/>
+            </div>
+        </div>
+
+        <h3>관리정보</h3>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label th:for="typicalFloorArea" class="col-sm-2 control-label">Typical Floor</label>
+                    <div class="col-xs-12 col-sm-10">
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-3">
+                                <div class="input-group">
+                                    <span class="input-group-addon">임대</span>
+                                    <input type="number" min="0.01" max="99999.99" step="0.01" class="form-control text-right" th:field="*{typicalFloorArea.rental.pyeong}" placeholder="평"/>
+                                    <span class="input-group-addon">평</span>
+                                </div>
+                            </div>
+                            <div class="col-xs-6 col-sm-3">
+                                <div class="input-group">
+                                    <span class="input-group-addon">임대</span>
+                                    <input type="number" min="0.01" max="99999.99" step="0.01" class="form-control text-right" th:field="*{typicalFloorArea.rental.squareMeter}" placeholder="㎡"/>
+                                    <span class="input-group-addon">㎡</span>
+                                </div>
+                            </div>
+                            <div class="col-xs-6 col-sm-3">
+                                <div class="input-group">
+                                    <span class="input-group-addon">전용</span>
+                                    <input type="number" min="0.01" max="99999.99" step="0.01" class="form-control text-right" th:field="*{typicalFloorArea.exclusive.pyeong}" placeholder="평"/>
+                                    <span class="input-group-addon">평</span>
+                                </div>
+                            </div>
+                            <div class="col-xs-6 col-sm-3">
+                                <div class="input-group">
+                                    <span class="input-group-addon">전용</span>
+                                    <input type="number" min="0.01" max="99999.99" step="0.01" class="form-control text-right" th:field="*{typicalFloorArea.exclusive.squareMeter}" placeholder="㎡"/>
+                                    <span class="input-group-addon">㎡</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label th:for="accessRoad" class="col-sm-2 control-label">Commission</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" th:field="*{commission}" placeholder="수수료"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label th:for="rentCalculation" class="col-sm-2 control-label">Rent</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" th:field="*{rentCalculation}" placeholder="임대료 산정방식"/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label th:for="maintenanceFee" class="col-sm-2 control-label">BM Fee</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" th:field="*{maintenanceFee}" placeholder="관리비용"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label th:for="depositRate" class="col-sm-2 control-label">Deposit</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" th:field="*{depositRate}" placeholder="보증금 비율"/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label th:for="maintenanceItem" class="col-xs-12 col-sm-2 control-label">BM Item</label>
+                    <div class="col-xs-4 col-sm-3">
+                        <input type="text" class="form-control" th:field="*{maintenanceItem.type}" placeholder="유형"/>
+                    </div>
+                    <div class="col-xs-8 col-sm-7">
+                        <input type="text" class="form-control" th:field="*{maintenanceItem.note}" placeholder="10시 이후 사용분 추가 징수"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label th:for="parkingFee" class="col-sm-2 control-label">Parking Fee</label>
+                    <div class="col-sm-5">
+                        <div class="input-group">
+                            <span class="input-group-addon">무료</span>
+                            <input type="text" class="form-control" th:field="*{parkingFee.free}" placeholder="주차비용 ex)평당 X대"/>
+                        </div>
+                    </div>
+                    <div class="col-sm-5">
+                        <div class="input-group">
+                            <span class="input-group-addon">유료</span>
+                            <input type="text" class="form-control" th:field="*{parkingFee.paid}" placeholder="주차비용 ex)10만 (30평당 1대)"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label th:for="workHour" class="col-xs-12 col-sm-2 control-label">Work</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" th:field="*{workHour}" placeholder="근무시간"/>
+                    </div>
+
+                    <div class="col-xs-4 col-sm-3">
+                        <input type="text" class="form-control" th:field="*{workHour.type}" placeholder="유형"/>
+                    </div>
+                    <div class="col-xs-8 col-sm-7">
+                        <input type="text" class="form-control" th:field="*{workHour.note}" placeholder="0~5시 출입통제"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label th:for="avoidedTenant" class="col-sm-2 control-label">Avoided</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" th:field="*{avoidedTenant}" placeholder="기피 업종 ex) 다단계 콜센터 기획부동산"/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label th:for="exclusive" class="col-sm-2 control-label">Exclusive</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" th:field="*{exclusive}" placeholder="전속물건"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-offset-1 col-sm-11">
+                <button type="submit" class="btn btn-default">Add to buildings</button>
+            </div>
+        </div>
+    </form>
+
+</body>
+
+</html>

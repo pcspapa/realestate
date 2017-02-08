@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
-  ~ Copyright (c) 2016. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+  ~ Copyright (c) 2017. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
   ~ Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
   ~ Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
   ~ Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
@@ -9,25 +9,38 @@
 
 <html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-    <name>Business Consulting :: building List</name>
+    <name>Business Consulting :: Writing Contact</name>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/bootstrap/3.3.7/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}"/>
-    <link rel="stylesheet" href="../static/real-estate.css" th:href="@{/real-estate.css}"/>
+    <link rel="stylesheet" href="./static/real-estate.css" th:href="@{/real-estate.css}"/>
 
     <script src="https://cdn.jsdelivr.net/jquery/3.1.1/jquery.min.js" th:src="@{/webjars/jquery/3.1.1/jquery.min.js}"></script>
     <script src="https://cdn.jsdelivr.net/bootstrap/3.3.7/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
-    <script type="text/javascript">
+    <script src="./static/libs/bootstrap-3-typeahead/3.1.1/bootstrap3-typeahead.js" th:src="@{/libs//bootstrap-3-typeahead/3.1.1/bootstrap3-typeahead.min.js}"></script>
+    <script type="text/javascript" th:inline="javascript">
         $(document).ready(function() {
-            // click event for .table > tbody > tr
-            $('.table tbody').on( 'click', 'tr', function () {
-                if ( $(this).hasClass('active') ) {
-                    $(this).removeClass('active');
+
+            // TODO 입력된 정보가 삭제될 경우 처리 필요.
+            $('#name').typeahead({
+                autoSelect: true,
+                delay: 400,
+                displayText: function (item) {
+                    return item.sggBdName
+                },
+                afterSelect: function (item) {
+                    this.$element[0].value = item.sggBdName;
+                    $('#address').val(item.road);
+                },
+                source: function (value, process) {
+                    $.ajax({
+                        url: /*[[@{/addresses/}]]*/ '/addresses/?bdName=query',
+                        data: {bdName: value},
+                        dataType: 'json'
+                    }).done(function (data) {
+                        return process(data);
+                    });
                 }
-                else {
-                    $('.table tr.active').removeClass('active');
-                    $(this).addClass('active');
-                }
-                $(location).attr('href', $(this).data("url") + $(this).data("id"));
-            } );
+            });
+
         });
     </script>
 </head>
@@ -73,55 +86,8 @@
 </nav>
 
 <div class="container-fluid real-estate">
-
-    <div class="real-estate-header">
-        <h1>Your Building List</h1>
-        <p class="lead blog-description">The official example template of creating a blog with Bootstrap.</p>
-    </div>
-
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <td>name</td>
-                <td>address</td>
-                <td>composition</td>
-            </tr>
-        </thead>
-        <tbody th:unless="${#lists.isEmpty(buildings)}">
-            <tr th:each="building : ${buildings}" th:attr="data-id=${building.id},data-url=@{/buildings/}">
-                <td th:text="${building.address.sggBdName}">name</td>
-                <td th:text="${building.address.road}">address</td>
-                <td th:text="${building.composition}">composition</td>
-            </tr>
-        </tbody>
-        <tbody th:if="${#lists.isEmpty(buildings)}">
-            <tr>
-                <td colspan="3">You have no buildings in your building list</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <p class="text-right">
-        <a class="btn btn-primary" href="./writing-building.html" th:href="@{/buildings/build}" role="button">New</a>
-    </p>
-
-    <div th:unless="${#lists.isEmpty(buildings)}">
-        <dl class="row" th:each="building : ${buildings}">
-            <dt class="col-md-7">
-                <span th:text="${building.address.sggBdName}">name</span>
-                <span th:text="${building.address.road}">address</span>
-            </dt>
-            <dd class="col-md-5">
-                <span th:if="${building.composition}" th:text="${building.composition}">composition</span>
-                <span th:if="${building.composition eq null}">No composition available</span>
-            </dd>
-        </dl>
-    </div>
-
-    <div th:if="${#lists.isEmpty(buildings)}">
-        <p>You have no buildings in your building list</p>
-    </div>
-
+    <h2>Edit a Building</h2>
+    <div th:replace="buildings/building :: form (@{/buildings/} + ${building.id}, 'put', 'Edit')"></div>
 </div>
 
 

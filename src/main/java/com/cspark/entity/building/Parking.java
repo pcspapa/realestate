@@ -10,7 +10,9 @@ package com.cspark.entity.building;
 
 import lombok.Data;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.validation.constraints.Digits;
 
 /**
  * Created by cspark on 2017. 1. 17..
@@ -22,47 +24,63 @@ public class Parking {
      * 옥내_기계식_대수(대)
      * cf. indrMechUtcnt
      */
-    private String inMechCnt;
+    @Digits(integer = 6, fraction = 0)
+    @Column(precision = 6)
+    private Integer inMechCnt;
 
     /**
      * 옥내_기계식_면적(㎡)
      * cf. indrMechArea
      */
-    private String inMechArea;
+    @Digits(integer=10, fraction=2)
+    @Column(precision=12, scale=2, columnDefinition = "DECIMAL(12,2)")
+    private Double inMechArea;
 
     /**
      * 옥내_자주식_대수(대)
      * cf. indrAutoUtcnt
      */
-    private String inAutoCnt;
+    @Digits(integer = 6, fraction = 0)
+    @Column(precision = 6)
+    private Integer inAutoCnt;
 
     /**
      * 옥내_자주식_면적(㎡) indrAutoArea
      */
-    private String inAutoArea;
+    @Digits(integer=10, fraction=2)
+    @Column(precision=12, scale=2, columnDefinition = "DECIMAL(12,2)")
+    private Double inAutoArea;
 
     /**
      * 옥외_기계식_대수(대)
      * cf. oudrMechUtcnt
      */
-    private String outMechCnt;
+    @Digits(integer = 6, fraction = 0)
+    @Column(precision = 6)
+    private Integer outMechCnt;
 
     /**
      * 옥외_기계식_면적(㎡)
      * cf. oudrMechArea
      */
-    private String outMechArea;
+    @Digits(integer=10, fraction=2)
+    @Column(precision=12, scale=2, columnDefinition = "DECIMAL(12,2)")
+    private Double outMechArea;
 
     /**
      * 옥외_자주식_대수(대)
      * cf. oudrAutoUtcnt
      */
-    private String outAutoCnt;
+    @Digits(integer = 6, fraction = 0)
+    @Column(precision = 6)
+    private Integer outAutoCnt;
 
     /**
      * 옥외_자주식_면적(㎡)
      * cf. oudrAutoArea
      */
-    private String outAutoArea;
+    @Digits(integer=10, fraction=2)
+    @Column(precision=12, scale=2, columnDefinition = "DECIMAL(12,2)")
+    private Double outAutoArea;
 
 }

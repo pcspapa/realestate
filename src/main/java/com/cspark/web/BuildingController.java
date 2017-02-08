@@ -9,13 +9,11 @@
 package com.cspark.web;
 
 import com.cspark.entity.Building;
-import com.cspark.entity.Contact;
-import com.cspark.repository.BuildingRepository;
+import com.cspark.entity.address.Address;
 import com.cspark.service.BuildingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -38,6 +36,12 @@ public class BuildingController {
     @Autowired
     private BuildingService buildingService;
 
+    /**
+     * 등록된 건물 목록을 보여준다.
+     *
+     * @param model
+     * @return
+     */
     @RequestMapping(method = RequestMethod.GET)
     public String buildings(Model model) {
         model.addAttribute("buildings", buildingService.findAll());
@@ -45,8 +49,26 @@ public class BuildingController {
         return "buildings/building-list";
     }
 
+    /**
+     * 건물 등록을 위한 화면을 보여준다.
+     *
+     * @param building
+     * @return
+     */
+    @RequestMapping(value = "/build", method = RequestMethod.GET)
+    public String beingBuilt(Building building) {
+        return "buildings/writing-building";
+    }
+
+    /**
+     * 건물을 등록한다.
+     *
+     * @param building
+     * @param bindingResult
+     * @return
+     */
     @RequestMapping(method = RequestMethod.POST)
-    public String addToBuildings(@ModelAttribute @Valid Building building, BindingResult bindingResult) {
+    public String build(@ModelAttribute Address address, @ModelAttribute @Valid Building building, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             logger.warn("{}", bindingResult.getAllErrors());
             return "buildings/writing-building";
@@ -56,11 +78,13 @@ public class BuildingController {
         return "redirect:/buildings";
     }
 
-    @RequestMapping(value = "/new", method = RequestMethod.GET)
-    public String building(Building building) {
-        return "buildings/writing-building";
-    }
-
+    /**
+     * 등록된 건물을 보여준다.
+     *
+     * @param id
+     * @param model
+     * @return
+     */
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String building(@PathVariable Long id, Model model) {
         model.addAttribute("building", buildingService.findOne(id));
@@ -68,11 +92,31 @@ public class BuildingController {
         return "buildings/reading-building";
     }
 
+    /**
+     * 등록된 건물의 수정을 위한 화면을 보여준다.
+     * @param id
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/{id}/rebuild", method = RequestMethod.GET)
+    public String beingRebuilt(@PathVariable Long id, Model model) {
+        model.addAttribute("building", buildingService.findOne(id));
+
+        return "buildings/editing-building";
+    }
+
+    /**
+     * 등록된 건물을 수정한다.
+     *
+     * @param id
+     * @param building
+     * @return
+     */
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public String editToBuildings(@PathVariable Long id, Building building) {
+    public String rebuild(@PathVariable Long id, Building building) {
         buildingService.edit(building);
 
-        return "contacts/reading-contact";
+        return "redirect:/buildings/" + id;
     }
 
 }

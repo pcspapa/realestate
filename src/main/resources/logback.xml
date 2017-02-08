@@ -12,5 +12,6 @@
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
 
     <logger name="com.cspark" level="debug"/>
+    <logger name="org.hibernate.type" level="trace"/>
 
 </configuration>

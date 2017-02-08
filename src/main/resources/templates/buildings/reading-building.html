@@ -16,7 +16,7 @@
     <script src="https://cdn.jsdelivr.net/jquery/3.1.1/jquery.min.js" th:src="@{/webjars/jquery/3.1.1/jquery.min.js}"></script>
     <script src="https://cdn.jsdelivr.net/bootstrap/3.3.7/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
     <script type="text/javascript">
-        $(document).ready(function() {
+        ${document).ready(function() {
 
         });
     </script>
@@ -63,7 +63,7 @@
 </nav>
 
 <div class="container-fluid real-estate">
-    <h2 th:text="${building.name}">View a building</h2>
+    <h2 th:text="${building.address.sggBdName}">Building Name</h2>
     <div class="row">
         <div class="col-sm-4">
             <div class="panel panel-default">
@@ -73,86 +73,278 @@
             </div>
             <p class="text-right">
                 <a class="btn btn-default" href="./building-list.html" th:href="@{/buildings}" role="button">List</a>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Edit</button>
+                <a class="btn btn-primary" href="./editing-building.html" th:href="@{/buildings/} + ${building.id} + '/rebuild'" role="button">Edit</a>
             </p>
         </div>
 
         <div class="col-sm-8">
             <div class="panel panel-default">
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <dl class="dl-horizontal">
-                                <dt>name</dt>
-                                <dd>빌딩이름빌딩이름빌딩이름빌딩이름빌딩이름빌딩이름</dd>
-                            </dl>
-                        </div>
-                        <div class="col-sm-6">
-                            <dl class="dl-horizontal">
-                                <dt>address</dt>
-                                <dd>서울시 강서구 마곡동</dd>
-                            </dl>
-                        </div>
-                    </div>
-
-                    <dl class="dl-horizontal row">
-                        <dt class="col-sm-2">name</dt>
-                        <dd class="col-sm-4">빌딩이름빌딩이름빌딩이름빌딩이름빌딩이름빌딩이름</dd>
-                        <dt class="col-sm-2">name</dt>
-                        <dd class="col-sm-4">빌딩이름빌딩이름빌딩이름빌딩이름빌딩이름빌딩이름</dd>
-                    </dl>
-
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label">Email</label>
-                                <div class="col-sm-10">
-                                    <p class="form-control-static">email@example.com</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label">Email</label>
-                                <div class="col-sm-10">
-                                    <p class="form-control-static">email@example.com</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th class="col-md-3 text-center">대지위치</th>
+                        <th class="col-md-2 text-center">건축물명칭</th>
+                        <th class="col-md-2 text-center">동명칭및번호</th>
+                        <th class="col-md-3 text-center">주용도</th>
+                        <th class="col-md-2 text-center">연면적(㎡)</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td th:text="${building.address.shortRoad}">방화대로4길 62</td>
+                        <td th:text="${building.address.sggBdName}">마곡경남아너스빌</td>
+                        <td>-모름-</td>
+                        <td th:text="${building.purpose}"></td>
+                        <td th:text="${building.totalFloorArea}"></td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
 
             <div class="panel panel-default">
-                <div class="panel-body">
-                    <div class="form-horizontal">
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">Email</label>
-                                    <div class="col-sm-10">
-                                        <p class="form-control-static">email@example.com</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">Email</label>
-                                    <div class="col-sm-10">
-                                        <p class="form-control-static">email@example.com</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <div class="panel-heading">집합건축물</div>
+                <table class="table table-bordered">
+                    <colgroup>
+                        <col class="col-md-1"/>
+                        <col class="col-md-3"/>
+                        <col class="col-md-1"/>
+                        <col class="col-md-3"/>
+                        <col class="col-md-1"/>
+                        <col class="col-md-3"/>
+                    </colgroup>
+                    <tbody>
+                    <tr>
+                        <th class=" text-nowrap text-center" scope="row">대지위치</th>
+                        <td colspan="3" th:text="${building.address.road}">서울시 강서구 방화대로34길 62</td>
+                        <th class=" text-nowrap text-center" scope="row">지번</th>
+                        <td>888</td>
+                    </tr>
+                    <tr>
+                        <th class=" text-nowrap text-center" scope="row">용도지역</th>
+                        <td th:text="${building.useZoning}"></td>
+                        <th class=" text-nowrap text-center" scope="row">용도지구</th>
+                        <td th:text="${building.useDistrict}"></td>
+                        <th class=" text-nowrap text-center" scope="row">구역</th>
+                        <td th:text="${building.boundary}"></td>
+                    </tr>
+                    <tr>
+                        <th class=" text-nowrap text-center" scope="row">대지면적</th>
+                        <td th:text="${building.landArea?.squareMeter}"></td>
+                        <th class=" text-nowrap text-center" scope="row">연면적</th>
+                        <td th:text="${building.totalFloorArea?.squareMeter}"></td>
+                        <th class=" text-nowrap text-center" scope="row">명칭및번호</th>
+                        <td>-모름-</td>
+                    </tr>
+                    <tr>
+                        <th class=" text-nowrap text-center" scope="row">건축면적</th>
+                        <td th:text="${building.area?.squareMeter}"></td>
+                        <th class=" text-nowrap text-center" scope="row"><sup>용적률산정용</sup><small>연면적</small></th>
+                        <td th:text="${building.totalFloorAreaForFloorRt}"></td>
+                        <th class=" text-nowrap text-center" scope="row">건축물수</th>
+                        <td th:text="${building.mainBuildingCnt}"></td>
+                    </tr>
+                    <tr>
+                        <th class=" text-nowrap text-center" scope="row">건폐율</th>
+                        <td th:text="${building.ratio}"></td>
+                        <th class=" text-nowrap text-center" scope="row">용적률</th>
+                        <td th:text="${building.ratio}"></td>
+                        <th class=" text-nowrap text-center" scope="row">총호수</th>
+                        <td>
+                            <span th:text="${building.householdCnt}"></span>&nbsp;
+                            <span th:text="${building.familyCnt}"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class=" text-nowrap text-center" scope="row">주용도</th>
+                        <td th:text="${building.purpose}"></td>
+                        <th class=" text-nowrap text-center" scope="row">주구조지붕구조</th>
+                        <td th:text="${building.structure}"></td>
+                        <th class=" text-nowrap text-center" scope="row">보속건축물</th>
+                        <td>
+                            <span th:text="${building.attachedBuildingCnt}"></span>&nbsp;
+                            <span th:text="${building.attachedBuildingArea}"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class=" text-nowrap text-center" scope="row">허가일자</th>
+                        <td th:text="${building.permissionDate}"></td>
+                        <th class=" text-nowrap text-center" scope="row">착공일자</th>
+                        <td th:text="${building.stcnsDate}"></td>
+                        <th class=" text-nowrap text-center" scope="row">사용승인일자</th>
+                        <td th:text="${building.approvalOfUse}"></td>
+                    </tr>
+                    <tr>
+                        <th class=" text-nowrap text-center" scope="row">특이사항</th>
+                        <td colspan="5">-모름-</td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
 
             <div class="panel panel-default">
-                <!-- Default panel contents -->
+                <div class="panel-heading">주차장</div>
+                <table class="table table-bordered">
+                    <tbody>
+                    <tr>
+                        <th class="col-md-1 text-nowrap text-center" scope="row">옥내기계식</th>
+                        <td class="col-md-2">
+                            <span th:text="${building.parking?.inMechCnt}"></span>
+                            <span th:text="${building.parking?.inMechArea}"></span>
+                        </td>
+                        <th class="col-md-1 text-nowrap text-center" scope="row">옥내자주식</th>
+                        <td class="col-md-2">
+                            <span th:text="${building.parking?.inAutoCnt}"></span>
+                            <span th:text="${building.parking?.inAutoArea}"></span>
+                        </td>
+                        <th class="col-md-1 text-nowrap text-center" scope="row">옥외기계식</th>
+                        <td class="col-md-2">
+                            <span th:text="${building.parking?.outMechCnt}"></span>
+                            <span th:text="${building.parking?.outMechArea}"></span>
+                        </td>
+                        <th class="col-md-1 text-nowrap text-center" scope="row">옥외자주식</th>
+                        <td class="col-md-2">
+                            <span th:text="${building.parking?.outAutoCnt}"></span>
+                            <span th:text="${building.parking?.outAutoArea}"></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">승강기</div>
+                <table class="table table-bordered">
+                    <tbody>
+                    <tr>
+                        <th class="col-md-1 text-nowrap text-center" scope="row">승용</th>
+                        <td class="col-md-5" th:text="${building.elevator?.type}"></td>
+                        <th class="col-md-1 text-nowrap text-center" scope="row">비상용</th>
+                        <td class="col-md-5" th:text="${building.elevator?.note}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">오수정화시설</div>
+                <table class="table table-bordered">
+                    <tbody>
+                    <tr>
+                        <th class="col-md-1 text-nowrap text-center" scope="row">형식</th>
+                        <td class="col-md-5" th:text="${building.spfType}"></td>
+                        <th class="col-md-1 text-nowrap text-center" scope="row">용량</th>
+                        <td class="col-md-5" th:text="${building.spfCapacity}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">기타</div>
+                <table class="table table-bordered">
+                    <tbody>
+                    <tr>
+                        <th class="col-md-1 text-nowrap text-center" scope="row">관련지번</th>
+                        <td class="col-md-11">-모름-</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">추가정보</div>
+                <table class="table table-bordered">
+                    <colgroup>
+                        <col class="col-md-1"/>
+                        <col class="col-md-2"/>
+                        <col class="col-md-1"/>
+                        <col class="col-md-2"/>
+                        <col class="col-md-1"/>
+                        <col class="col-md-2"/>
+                        <col class="col-md-1"/>
+                        <col class="col-md-2"/>
+                    </colgroup>
+                    <tbody>
+                    <tr>
+                        <th class="text-nowrap text-center" scope="row">건축규모</th>
+                        <td th:text="${building.composition}"></td>
+                        <th class="text-nowrap text-center" scope="row">냉난방장치</th>
+                        <td th:text="${building.airConditioner}"></td>
+                        <th class="text-nowrap text-center" scope="row">근접사거리</th>
+                        <td th:text="${building.nearestCrossroad}"></td>
+                        <th class="text-nowrap text-center" scope="row">접근도로</th>
+                        <td th:text="${building.accessRoad}"></td>
+                    </tr>
+                    <tr>
+                        <th class="text-nowrap text-center" scope="row">역세권</th>
+                        <td th:text="${building.subwayStationSphere}"></td>
+                        <th class="text-nowrap text-center" scope="row">건물사진</th>
+                        <td th:text="${building.image}"></td>
+                        <th class="text-nowrap text-center" scope="row">평면도</th>
+                        <td th:text="${building.floorPlan}"></td>
+                        <th class="text-nowrap text-center" scope="row">위치도</th>
+                        <td th:text="${building.locationMap}"></td>
+                    </tr>
+                    <tr>
+                        <th class="text-nowrap text-center" scope="row">특징(광고)</th>
+                        <td colspan="7" th:text="${building.feature}"></td>
+                    </tr>
+                    <tr>
+                        <th class="text-nowrap text-center" scope="row">비고</th>
+                        <td colspan="7" th:text="${building.note}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">관리정보</div>
+                <table class="table table-bordered">
+                    <colgroup>
+                        <col class="col-md-1"/>
+                        <col class="col-md-2"/>
+                        <col class="col-md-1"/>
+                        <col class="col-md-2"/>
+                        <col class="col-md-1"/>
+                        <col class="col-md-2"/>
+                        <col class="col-md-1"/>
+                        <col class="col-md-2"/>
+                    </colgroup>
+                    <tbody>
+                    <tr>
+                        <th class="text-nowrap text-center" scope="row">기준층 면적</th>
+                        <td th:text="${building.typicalFloorArea}"></td>
+                        <th class="text-nowrap text-center" scope="row">수수료</th>
+                        <td th:text="${building.commission}"></td>
+                        <th class="text-nowrap text-center" scope="row">임대료 산정방식</th>
+                        <td th:text="${building.rentCalculation}"></td>
+                        <th class="text-nowrap text-center" scope="row">관리비</th>
+                        <td th:text="${building.maintenanceFee}"></td>
+                    </tr>
+                    <tr>
+                        <th class="text-nowrap text-center" scope="row">보증금 비율</th>
+                        <td th:text="${building.depositRate}"></td>
+                        <th class="text-nowrap text-center" scope="row">관리 항목</th>
+                        <td th:text="${building.maintenanceItem}"></td>
+                        <th class="text-nowrap text-center" scope="row">주차비용</th>
+                        <td th:text="${building.parkingFee}"></td>
+                        <th class="text-nowrap text-center" scope="row">근무시간</th>
+                        <td th:text="${building.workHour}"></td>
+                    </tr>
+                    <tr>
+                        <th class="text-nowrap text-center" scope="row">기피업종</th>
+                        <td colspan="3" th:text="${building.avoidedTenant}"></td>
+                        <th class="text-nowrap text-center" scope="row">전속물건</th>
+                        <td colspan="3" th:text="${building.exclusive}"></td>
+                    </tr>
+                    <tr>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="panel panel-default">
                 <div class="panel-heading">Floor List</div>
-
-                <!-- Table -->
                 <table class="table">
                     <thead>
                     <tr>
@@ -170,110 +362,6 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>2017.01.01</td>
-                        <td>2017.01.01</td>
-                        <td>C/임</td>
-                        <td>17층/일부</td>
-                        <td>461/244</td>
-                        <td>63,075/6,305/2,032/8,338</td>
-                        <td>공실</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>가능</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>2017.01.01</td>
-                        <td>2017.01.01</td>
-                        <td>C/임</td>
-                        <td>17층/일부</td>
-                        <td>461/244</td>
-                        <td>63,075/6,305/2,032/8,338</td>
-                        <td>공실</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>가능</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>2017.01.01</td>
-                        <td>2017.01.01</td>
-                        <td>C/임</td>
-                        <td>17층/일부</td>
-                        <td>461/244</td>
-                        <td>63,075/6,305/2,032/8,338</td>
-                        <td>공실</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>가능</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>2017.01.01</td>
-                        <td>2017.01.01</td>
-                        <td>C/임</td>
-                        <td>17층/일부</td>
-                        <td>461/244</td>
-                        <td>63,075/6,305/2,032/8,338</td>
-                        <td>공실</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>가능</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>2017.01.01</td>
-                        <td>2017.01.01</td>
-                        <td>C/임</td>
-                        <td>17층/일부</td>
-                        <td>461/244</td>
-                        <td>63,075/6,305/2,032/8,338</td>
-                        <td>공실</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>가능</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>2017.01.01</td>
-                        <td>2017.01.01</td>
-                        <td>C/임</td>
-                        <td>17층/일부</td>
-                        <td>461/244</td>
-                        <td>63,075/6,305/2,032/8,338</td>
-                        <td>공실</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>가능</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>2017.01.01</td>
-                        <td>2017.01.01</td>
-                        <td>C/임</td>
-                        <td>17층/일부</td>
-                        <td>461/244</td>
-                        <td>63,075/6,305/2,032/8,338</td>
-                        <td>공실</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>가능</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>2017.01.01</td>
-                        <td>2017.01.01</td>
-                        <td>C/임</td>
-                        <td>17층/일부</td>
-                        <td>461/244</td>
-                        <td>63,075/6,305/2,032/8,338</td>
-                        <td>공실</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>가능</td>
-                    </tr>
                     <tr>
                         <td>1</td>
                         <td>2017.01.01</td>
@@ -404,30 +492,6 @@
                         <td>성차기 차장</td>
                         <td>Contents......</td>
                     </tr>
-                    <tr>
-                        <td>2016.12.25</td>
-                        <td>사무실/임대</td>
-                        <td>성차기 차장</td>
-                        <td>Contents......</td>
-                    </tr>
-                    <tr>
-                        <td>2016.12.25</td>
-                        <td>사무실/임대</td>
-                        <td>성차기 차장</td>
-                        <td>Contents......</td>
-                    </tr>
-                    <tr>
-                        <td>2016.12.25</td>
-                        <td>사무실/임대</td>
-                        <td>성차기 차장</td>
-                        <td>Contents......</td>
-                    </tr>
-                    <tr>
-                        <td>2016.12.25</td>
-                        <td>사무실/임대</td>
-                        <td>성차기 차장</td>
-                        <td>Contents......</td>
-                    </tr>
                     </tbody>
                 </table>
             </div>
@@ -437,14 +501,14 @@
 </div>
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-fs" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="myModalLabel">Edit a building</h4>
             </div>
             <div class="modal-body">
-                <div th:replace="buildings/building :: form (@{/buildings/} + ${building.id}, 'put')"></div>
+                <div th:replace="buildings/building :: form (@{/buildings/} + ${building.id}, 'put', 'Edit')"></div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

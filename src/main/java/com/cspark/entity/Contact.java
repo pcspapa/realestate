@@ -13,11 +13,10 @@ import lombok.Data;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.Pattern;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Data
@@ -62,5 +61,8 @@ public class Contact {
     private String address;
 
     private String note;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "id.contact")
+    private Set<BuildingContact> buildingContacts = new HashSet<>();
 
 }

@@ -21,12 +21,12 @@ import javax.validation.constraints.Digits;
 @Data
 public class Area {
 
-    @Digits(integer=5, fraction=2)
-    @Column(precision=7, scale=2, columnDefinition = "DECIMAL(7,2)")
+    @Digits(integer=10, fraction=2)
+    @Column(precision=12, scale=2, columnDefinition = "DECIMAL(12,2)")
     private Double pyeong;
 
-    @Digits(integer=5, fraction=2)
-    @Column(precision=7, scale=2, columnDefinition = "DECIMAL(7,2)")
+    @Digits(integer=10, fraction=2)
+    @Column(precision=12, scale=2, columnDefinition = "DECIMAL(12,2)")
     private Double squareMeter;
 
 }

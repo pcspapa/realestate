@@ -8,49 +8,57 @@
 
 package com.cspark.entity;
 
+import com.cspark.entity.address.Address;
 import com.cspark.entity.building.*;
 import com.cspark.entity.core.TypeAndNote;
-import com.cspark.validation.constraints.ByteLength;
-import lombok.Data;
+import lombok.*;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by cspark on 2016. 10. 21..
  */
 @Entity
 @Data
+@Getter @Setter
 public class Building {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    /**
-     * 주소 (address)
-     * - 도로명 주소 표현.
-     */
     @NotBlank
-    private String address;
+    @Column(name = "ADDRESS_ID")
+    private String addressId;
+
+    @ManyToOne
+    @JoinColumn(name = "ADDRESS_ID", referencedColumnName = "MGT_NO", insertable = false, updatable = false)
+    private Address address;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "id.building", cascade=CascadeType.ALL)
+    private Set<BuildingContact> buildingContacts = new HashSet<>();
 
     /**
-     * 이름 (Building Name)
+     * 용도지역 (Use Zoning)
      */
-    @ByteLength(min = 4, max = 100)
-    private String name;
+    private String useZoning;
 
-    // 용도지역
-
-    // 용도지구
+    /**
+     * 용도지구 (Use District)
+     */
+    private String useDistrict;
 
     /**
      * 대지면적 (Land Area)
      */
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name="pyeong", column=@Column(name="LAND_AREA_PY")),
-            @AttributeOverride(name="squareMeter", column=@Column(name="LAND_AREA_M2"))
+            @AttributeOverride(name = "pyeong", column = @Column(name = "LAND_AREA_PY")),
+            @AttributeOverride(name = "squareMeter", column = @Column(name = "LAND_AREA_M2"))
     })
     private Area landArea;
 
@@ -59,8 +67,8 @@ public class Building {
      */
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name="pyeong", column=@Column(name="TOTAL_FLOOR_AREA_PY")),
-            @AttributeOverride(name="squareMeter", column=@Column(name="TOTAL_FLOOR_AREA_M2"))
+            @AttributeOverride(name = "pyeong", column = @Column(name = "TOTAL_FLOOR_AREA_PY")),
+            @AttributeOverride(name = "squareMeter", column = @Column(name = "TOTAL_FLOOR_AREA_M2"))
     })
     private Area totalFloorArea;
 
@@ -69,32 +77,51 @@ public class Building {
      */
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name="coverage", column=@Column(name="COVERAGE_RT")),
-            @AttributeOverride(name="floor", column=@Column(name="FLOOR_RT"))
+            @AttributeOverride(name = "pyeong", column = @Column(name = "AREA_PY")),
+            @AttributeOverride(name = "squareMeter", column = @Column(name = "AREA_M2"))
     })
     private Area area;
 
-    // 용적율산정용연면적 vlRatEstmTotArea
+    /**
+     * 용적율산정용연면적 (용적율 산정을 위한 연면적 : Total Floor Area For Floor Ratio)
+     */
+    private String totalFloorAreaForFloorRt;
 
     /**
      * 건축비율 (Construction Ratio)
+     * - 건폐율 : coverage
+     * - 용적율 : floor
      */
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name="coverage", column=@Column(name="COVERAGE_RT")),
-            @AttributeOverride(name="floor", column=@Column(name="FLOOR_RT"))
+            @AttributeOverride(name = "coverage", column = @Column(name = "COVERAGE_RT")),
+            @AttributeOverride(name = "floor", column = @Column(name = "FLOOR_RT"))
     })
     private Ratio ratio;
 
-    // 구역
+    /**
+     * 구역 (boundary)
+     */
+    private String boundary;
+
 
     // 명칭및번호
 
-    // 건축물수 mainBldCnt
+    /**
+     * 건축물수 (Main Building Count)
+     */
+    private Integer mainBuildingCnt;
 
-    // 총호수
-    // 세대_수(세대) hhldCnt
-    // 가구_수(가구) fmlyCnt
+
+    /**
+     * 총호수.세대_수(세대) (Household Count)
+     */
+    private Integer householdCnt;
+
+    /**
+     * 총호수.가구_수(가구) (Family Count)
+     */
+    private Integer familyCnt;
 
     /**
      * 건물용도 (주용도 : Building Purpose)
@@ -106,21 +133,33 @@ public class Building {
      */
     private String structure;
 
-    // 부속건축물
-    // 부속_건축물_수       atchBldCnt
-    // 부속_건축물_면적(㎡)  atchBldArea
+    /**
+     * 부속_건축물_수 (Attached Building Count)
+     */
+    private Integer attachedBuildingCnt;
 
-    // 허가일자 pmsDay
+    /**
+     * 부속_건축물_면적(㎡) (Attached Building Area)
+     */
+    private Double attachedBuildingArea;
 
-    // 착공일자 stcnsDay
+    /**
+     * 허가일자 (Permission Date)
+     */
+    private Date permissionDate;
+
+    /**
+     * 착공일자 (Date of the start of construction work)
+     */
+    private Date stcnsDate;
 
     /**
      * 사용승인 (Approval Of Use)
      */
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name="date", column=@Column(name="APPROVAL_DATE")),
-            @AttributeOverride(name="note", column=@Column(name="APPROVAL_NOTE"))
+            @AttributeOverride(name = "date", column = @Column(name = "APPROVAL_DATE")),
+            @AttributeOverride(name = "note", column = @Column(name = "APPROVAL_NOTE"))
     })
     private Approval approvalOfUse;
 
@@ -129,14 +168,14 @@ public class Building {
      */
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name="inMechCnt", column=@Column(name="PARKING_IMC")),
-            @AttributeOverride(name="inMechArea", column=@Column(name="PARKING_IMA")),
-            @AttributeOverride(name="inAutoCnt", column=@Column(name="PARKING_IAC")),
-            @AttributeOverride(name="inAutoArea", column=@Column(name="PARKING_IAA")),
-            @AttributeOverride(name="outMechCnt", column=@Column(name="PARKING_OMC")),
-            @AttributeOverride(name="outMechArea", column=@Column(name="PARKING_OMA")),
-            @AttributeOverride(name="outAutoCnt", column=@Column(name="PARKING_OAC")),
-            @AttributeOverride(name="outAutoArea", column=@Column(name="PARKING_OAA"))
+            @AttributeOverride(name = "inMechCnt", column = @Column(name = "PARKING_IMC")),
+            @AttributeOverride(name = "inMechArea", column = @Column(name = "PARKING_IMA")),
+            @AttributeOverride(name = "inAutoCnt", column = @Column(name = "PARKING_IAC")),
+            @AttributeOverride(name = "inAutoArea", column = @Column(name = "PARKING_IAA")),
+            @AttributeOverride(name = "outMechCnt", column = @Column(name = "PARKING_OMC")),
+            @AttributeOverride(name = "outMechArea", column = @Column(name = "PARKING_OMA")),
+            @AttributeOverride(name = "outAutoCnt", column = @Column(name = "PARKING_OAC")),
+            @AttributeOverride(name = "outAutoArea", column = @Column(name = "PARKING_OAA"))
     })
     private Parking parking;
 
@@ -145,12 +184,22 @@ public class Building {
      */
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name="type", column=@Column(name="ELEVATOR_TYPE")),
-            @AttributeOverride(name="note", column=@Column(name="ELEVATOR_NOTE"))
+            @AttributeOverride(name = "type", column = @Column(name = "ELEVATOR_TYPE")),
+            @AttributeOverride(name = "note", column = @Column(name = "ELEVATOR_NOTE"))
     })
     private TypeAndNote elevator;
 
-    // 오수정화시설 : 형식, 용량
+    /**
+     * 오수정화시설 (sewage purification facility)
+     * - 형식
+     */
+    private String spfType;
+
+    /**
+     * 오수정화시설 (sewage purification facility)
+     * - 용량
+     */
+    private Double spfCapacity;
 
     // 기타 : 관련지번
 
@@ -162,31 +211,27 @@ public class Building {
 
 
 
-
+    // s.self management infomation
 
     /**
-    * 건축규모 (Building Composition)
+     * 건축규모 (Building Composition)
+     *   ex. 지하 X층, 지상 XX층, CODE
      */
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name="basementFloor", column=@Column(name="COMPOSITION_BASEMENT_FLOOR")),
-            @AttributeOverride(name="groundFloor", column=@Column(name="COMPOSITION_GROUND_FLOOR")),
-            @AttributeOverride(name="type", column=@Column(name="COMPOSITION_TYPE"))
+            @AttributeOverride(name = "basementFloor", column = @Column(name = "COMPOSITION_BASEMENT_FLOOR")),
+            @AttributeOverride(name = "groundFloor", column = @Column(name = "COMPOSITION_GROUND_FLOOR")),
+            @AttributeOverride(name = "type", column = @Column(name = "COMPOSITION_TYPE"))
     })
     private Composition composition;
-
-    /**
-     * 도시계획 (Urban Planning)
-     */
-    private String urbanPlanning;
 
     /**
      * 냉난방장치 (Air Conditioner)
      */
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name="type", column=@Column(name="AIR_CONDITIONER_TYPE")),
-            @AttributeOverride(name="note", column=@Column(name="AIR_CONDITIONER_NOTE"))
+            @AttributeOverride(name = "type", column = @Column(name = "AIR_CONDITIONER_TYPE")),
+            @AttributeOverride(name = "note", column = @Column(name = "AIR_CONDITIONER_NOTE"))
     })
     private TypeAndNote airConditioner;
 
@@ -204,11 +249,6 @@ public class Building {
      * 역세권 (Subway Station Sphere)
      */
     private String subwayStationSphere;
-
-    /**
-     * 건물구분 (Building Classification)
-     */
-    private String classification;
 
     /**
      * 건물사진 (Building Image)
@@ -236,30 +276,23 @@ public class Building {
     private String note;
 
 
-
-
-
-
-
-
     /**
      * 관리_기준층 면적 (Typical Floor Area)
      */
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name="rental.pyeong", column=@Column(name="TYPICAL_FLOOR_RENTAL_AREA_PY")),
-            @AttributeOverride(name="rental.squareMeter", column=@Column(name="TYPICAL_FLOOR_RENTAL_AREA_M2")),
-            @AttributeOverride(name="exclusive.pyeong", column=@Column(name="TYPICAL_FLOOR_EXCLUSIVE_AREA_PY")),
-            @AttributeOverride(name="exclusive.squareMeter", column=@Column(name="TYPICAL_FLOOR_EXCLUSIVE_AREA_M2")),
-            @AttributeOverride(name="exclusiveRatio", column=@Column(name="TYPICAL_FLOOR_EXCLUSIVE_RT")),
-            @AttributeOverride(name="floorHeight", column=@Column(name="TYPICAL_FLOOR_HEIGHT"))
+            @AttributeOverride(name = "rental.pyeong", column = @Column(name = "TYPICAL_FLOOR_RENTAL_AREA_PY")),
+            @AttributeOverride(name = "rental.squareMeter", column = @Column(name = "TYPICAL_FLOOR_RENTAL_AREA_M2")),
+            @AttributeOverride(name = "exclusive.pyeong", column = @Column(name = "TYPICAL_FLOOR_EXCLUSIVE_AREA_PY")),
+            @AttributeOverride(name = "exclusive.squareMeter", column = @Column(name = "TYPICAL_FLOOR_EXCLUSIVE_AREA_M2")),
+            @AttributeOverride(name = "exclusiveRatio", column = @Column(name = "TYPICAL_FLOOR_EXCLUSIVE_RT")),
+            @AttributeOverride(name = "floorHeight", column = @Column(name = "TYPICAL_FLOOR_HEIGHT"))
     })
     private TypicalFloorArea typicalFloorArea;
 
     /**
      * 관리_수수료 (Commission)
      */
-
     private String commission;
 
     /**
@@ -282,8 +315,8 @@ public class Building {
      */
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name="type", column=@Column(name="MAINTENANCE_ITEM_TYPE")),
-            @AttributeOverride(name="note", column=@Column(name="MAINTENANCE_ITEM_NOTE"))
+            @AttributeOverride(name = "type", column = @Column(name = "MAINTENANCE_ITEM_TYPE")),
+            @AttributeOverride(name = "note", column = @Column(name = "MAINTENANCE_ITEM_NOTE"))
     })
     private TypeAndNote maintenanceItem;
 
@@ -292,8 +325,8 @@ public class Building {
      */
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name="free", column=@Column(name="PARKING_FEE_FREE")),
-            @AttributeOverride(name="paid", column=@Column(name="PARKING_FEE_PAID"))
+            @AttributeOverride(name = "free", column = @Column(name = "PARKING_FEE_FREE")),
+            @AttributeOverride(name = "paid", column = @Column(name = "PARKING_FEE_PAID"))
     })
     private ParkingFee parkingFee;
 
@@ -302,8 +335,8 @@ public class Building {
      */
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name="type", column=@Column(name="WORK_HOUR_TYPE")),
-            @AttributeOverride(name="note", column=@Column(name="WORK_HOUR_NOTE"))
+            @AttributeOverride(name = "type", column = @Column(name = "WORK_HOUR_TYPE")),
+            @AttributeOverride(name = "note", column = @Column(name = "WORK_HOUR_NOTE"))
     })
     private TypeAndNote workHour;
 
@@ -316,5 +349,15 @@ public class Building {
      * 관리_전속물건 (Exclusive)
      */
     private String exclusive;
+
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 
 }
